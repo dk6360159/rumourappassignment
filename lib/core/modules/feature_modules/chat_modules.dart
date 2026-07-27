@@ -2,6 +2,7 @@
 
 import 'package:rumour/core/events/event_bus.dart';
 import 'package:rumour/core/local_db/local_db_service.dart';
+import 'package:rumour/core/modules/locator_config.dart';
 import 'package:rumour/core/modules/module.dart';
 import 'package:rumour/features/chat/data/chat_local_provider.dart';
 import 'package:rumour/features/chat/data/chat_remote_provider.dart';
@@ -13,6 +14,7 @@ import 'package:rumour/features/chat/domain/usecases/create_message_local_usecas
 import 'package:rumour/features/chat/domain/usecases/create_message_remote_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/create_room_local_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/create_room_remote_usecase.dart';
+import 'package:rumour/features/chat/domain/usecases/get_random_user_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/load_all_local_messages_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/load_all_local_rooms_usecase.dart';
 import 'package:rumour/features/chat/presentation/service/chat_service.dart';
@@ -34,11 +36,13 @@ Module<CreateMemberLocalUsecase>(builder:() => CreateMemberLocalUsecase(reposito
 Module<LoadAllLocalMessagesUsecase>(builder:() => LoadAllLocalMessagesUsecase(repository: sl<ChatRepository>()),),
 Module<LoadAllLocalRoomsUsecase>(builder:() => LoadAllLocalRoomsUsecase(repository: sl<ChatRepository>()),),
 
+Module<GetRandomUserUsecase>(builder:() => GetRandomUserUsecase(repository: sl<ChatRepository>()),),
 
  Module<ChatService>(builder:() => ChatService(uCreateMessageLocal: sl<CreateMessageLocalUsecase>(),
  uCreateMemberLocal: sl<CreateMemberLocalUsecase>(),
  uLoadAllLocalMessages: sl<LoadAllLocalMessagesUsecase>(),
  uLoadAllLocalRooms: sl<LoadAllLocalRoomsUsecase>(),
+ uGetRandomUser: sl<GetRandomUserUsecase>(),
  
   bus:sl<EventBus>(), uCreateMemberRemote: sl<CreateMemberRemoteUsecase>(), uCreateMessageRemote: sl<CreateMessageRemoteUsecase>(), uCreateRoomLocal: sl<CreateRoomLocalUsecase>(), uCreateRoomRemote: sl<CreateRoomRemoteUsecase>()),)
 

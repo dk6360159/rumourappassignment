@@ -145,13 +145,7 @@ class _MessageScreenState extends State<MessageScreen> {
                   ),
                 ),
                 const SizedBox(height: 2),
-                const Text(
-                  "4 members", // replace with real member count if available
-                  style: TextStyle(
-                    color: _ChatColors.subtitle,
-                    fontSize: 12,
-                  ),
-                ),
+               
               ],
             ),
           ),

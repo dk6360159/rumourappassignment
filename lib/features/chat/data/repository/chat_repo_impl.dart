@@ -11,6 +11,7 @@ import 'package:rumour/features/chat/domain/usecases/create_message_local_usecas
 import 'package:rumour/features/chat/domain/usecases/create_message_remote_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/create_room_local_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/create_room_remote_usecase.dart';
+import 'package:rumour/features/chat/domain/usecases/get_random_user_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/load_all_local_messages_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/load_all_local_rooms_usecase.dart';
 
@@ -117,6 +118,18 @@ class  ChatRepoImpl extends ChatRepository {
       return Result.failure(AppFailure.fromException(e));
       
     }
+  }
+
+  @override
+  ResultFuture<GetRandomUserOut> getRandomUser(GetRandomUserParam param)async {
+  try {
+    final result= await remoteProvider.getRandomUser(param);
+    return Result.success(result);
+    
+  }on AppException catch (e) {
+    return Result.failure(AppFailure.fromException(e));
+    
+  }
   }
   
 }

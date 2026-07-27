@@ -20,17 +20,19 @@ class _Colors {
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  void _createRoom(BuildContext context) {
+  Future<void> _createRoom(BuildContext context)async {
     final code = generateRoomCode();
+   await  sl<ChatService>().getRandomUser();
     sl<ChatService>().createRoomRemote(
       CreateRoomRemoteUsecaseParam(
         room: RoomModel(
           roomCode: code,
-          myName: "Dinesh_$code",
+          myName: "${sl<ChatService>().randomUser!['first']} ${sl<ChatService>().randomUser!['last']}",
           senderDeviceId: sl<DeviceInfoService>().deviceId,
         ),
       ),
     );
+   
   }
 
   void _joinRoom(BuildContext context) {

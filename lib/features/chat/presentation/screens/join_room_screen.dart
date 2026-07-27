@@ -61,20 +61,21 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
     super.dispose();
   }
 
-  void _onProceed() {
+  Future<void> _onProceed()async {
     if (myCode.text.trim().isEmpty || _isSubmitting) return;
     setState(() => _isSubmitting = true);
-
+ await sl<ChatService>().getRandomUser();
     sl<ChatService>().createMemberRemote(
       CreateMemberRemoteUsecaseParam(
         member: RoomMember(
           deviceId: sl<DeviceInfoService>().deviceId,
           createDate: DateTime.now(),
           roomCode: myCode.text,
-          name: "Dinesh_${myCode.text}",
+          name: "${sl<ChatService>().randomUser!['first']} ${sl<ChatService>().randomUser!['last']}",
         ),
       ),
     );
+    
   }
 
   @override

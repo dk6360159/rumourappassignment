@@ -54,10 +54,7 @@ class JoinRoomPreviewScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 2),
-                        const Text(
-                          "4 members",
-                          style: TextStyle(color: _Colors.subtitle, fontSize: 12),
-                        ),
+                       
                       ],
                     ),
                   ),

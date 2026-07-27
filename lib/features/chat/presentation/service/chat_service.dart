@@ -5,12 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:rumour/core/base_service/base_service.dart';
 import 'package:rumour/core/events/event_bus.dart';
+import 'package:rumour/core/helpers/typedef.dart';
 import 'package:rumour/features/chat/domain/usecases/create_member_local_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/create_member_remote_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/create_message_local_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/create_message_remote_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/create_room_local_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/create_room_remote_usecase.dart';
+import 'package:rumour/features/chat/domain/usecases/get_random_user_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/load_all_local_messages_usecase.dart';
 import 'package:rumour/features/chat/domain/usecases/load_all_local_rooms_usecase.dart';
 import 'package:rumour/features/chat/presentation/models/room_member.dart';
@@ -29,6 +31,7 @@ class  ChatService extends BaseService {
 
   required this.uLoadAllLocalMessages,
   required this.uLoadAllLocalRooms,
+  required this.uGetRandomUser,
   required EventBus bus}):
   _bus=bus,
 
@@ -43,6 +46,8 @@ class  ChatService extends BaseService {
 
   final LoadAllLocalMessagesUsecase uLoadAllLocalMessages;
   final LoadAllLocalRoomsUsecase uLoadAllLocalRooms;
+
+  final GetRandomUserUsecase uGetRandomUser;
 
 
   final EventBus _bus;
@@ -62,6 +67,7 @@ StreamSubscription<QuerySnapshot>? _subscription;
 ValueNotifier<RoomMember?> currentRoom=ValueNotifier(null);
 ValueNotifier<List<MessageModel>> currentroomMessages=ValueNotifier([]);
 
+DataMap? randomUser;
 
 void changeCurrentRoom(RoomMember? room){
 
@@ -205,6 +211,21 @@ Future<void> createRoomRemote(CreateRoomRemoteUsecaseParam param)async{
 
 }
 
+Future<void> getRandomUser()async{
+  print("get random user method called");
+  final result= await uGetRandomUser(GetRandomUserParam());
+  result.fold(onSuccess:(value) {
+    randomUser=value.user;
+
+    print("get randon user is $randomUser");
+    
+  }, onFailure:(failure) {
+      print("get randon user is failurer $randomUser ${failure.message}");
+    
+  },);
+
+}
+
 
 
 
@@ -267,7 +288,7 @@ void startListening(List<String> roomCodes) {
  await   loadAllLocalMessages();
    await loadAllLocalRooms();
     startListening(_myChats.value.map((room)=>room.roomCode).toList());
-   
+   getRandomUser();
   }
   
 }
