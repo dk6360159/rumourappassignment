@@ -45,7 +45,16 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
         sl<ChatService>().changeCurrentRoom(newroom);
         // if (mounted) {
           Navigator.of(context).popAndPushNamed(joinRoomPreviewScreen, arguments: newroom);
+          myCode.clear();
         // }
+      }
+    });
+
+    
+    sl<EventBus>().on<ChatTaskFailed>().listen((data) {
+      if (data.task == ChatTask.createMemberRemote) {
+       
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("${data.failure!.message} ")));
       }
     });
 

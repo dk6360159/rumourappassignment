@@ -18,6 +18,17 @@ class  ChatRemoteProvider {
   Future<CreateMemberRemoteUsecaseOut>createMemberRemote(CreateMemberRemoteUsecaseParam param)async{
     try {
 
+        final snapshot = await FirebaseFirestore.instance
+      .collection('rooms')
+      .where('roomCode', isEqualTo: param.member.roomCode)
+      .limit(1)
+      .get();
+
+      if(snapshot.docs.isEmpty){
+        print("No room exist with this code");
+        throw const ServerException(message: "No room Exist with Code", statusCode: 5555);
+      }
+
       // await firestore.
  await firestore
       .collection('members')

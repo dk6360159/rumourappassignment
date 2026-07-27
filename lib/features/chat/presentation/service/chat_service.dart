@@ -231,13 +231,16 @@ Future<void> getRandomUser()async{
 
 
 void startListening(List<String> roomCodes) {
-  _subscription = FirebaseFirestore.instance
-      .collection('messages')
-      .where('roomCode', whereIn: roomCodes)
-      .orderBy('createDate')
-      .snapshots()
-      .listen(
-    (snapshot) async {
+
+_subscription = FirebaseFirestore.instance
+    .collection('message')
+    .where('roomCode', whereIn: roomCodes)
+    .snapshots()
+    .listen(
+  (snapshot) {
+
+
+     print("just lintend a a emessge $snapshot");
       for (final change in snapshot.docChanges) {
         switch (change.type) {
           case DocumentChangeType.added:
@@ -248,7 +251,7 @@ void startListening(List<String> roomCodes) {
             );
 
             // Save to SQLite
-            await createMessageLocal(CreateMessageLocalUsecaseParam(message: message));
+             createMessageLocal(CreateMessageLocalUsecaseParam(message: message));
 
           
 
@@ -265,8 +268,53 @@ void startListening(List<String> roomCodes) {
             break;
         }
       }
-    },
-  );
+  },
+  onError: (e) {
+    print(e);
+  },
+);
+
+  // print("Listener registed with ${roomCodes.length}");
+  // _subscription = FirebaseFirestore.instance
+  //     .collection('message')
+  //     .where('roomCode', whereIn: roomCodes)
+  //     .orderBy('createDate')
+  //     .snapshots()
+  //     .listen(
+  //   (snapshot) async {
+      // print("just lintend a a emessge $snapshot");
+      // for (final change in snapshot.docChanges) {
+      //   switch (change.type) {
+      //     case DocumentChangeType.added:
+      //       final message = MessageModel.fromMap(
+              
+      //       change.doc.data()!,
+            
+      //       );
+
+      //       // Save to SQLite
+      //       await createMessageLocal(CreateMessageLocalUsecaseParam(message: message));
+
+          
+
+      //       break;
+
+      //     case DocumentChangeType.modified:
+           
+
+      //       break;
+
+      //     case DocumentChangeType.removed:
+            
+
+      //       break;
+      //   }
+      // }
+  //   },
+  // );
+
+
+
 }
 
   @override
